@@ -1,0 +1,24 @@
+language: java
+env:
+  global:
+addons:
+  ssh_known_hosts:
+    - 106.12.80.76
+before_install:
+  - env
+install:
+  - echo 123
+script:
+  - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+  - docker build -t $TRAVIS_REPO_SLUG:$TRAVIS_BUILD_NUMBER .
+  - docker push $TRAVIS_REPO_SLUG:$TRAVIS_BUILD_NUMBER
+  - docker tag $TRAVIS_REPO_SLUG:$TRAVIS_BUILD_NUMBER $TRAVIS_REPO_SLUG:latest
+  - docker push $TRAVIS_REPO_SLUG:latest
+after_success:
+  - echo 456
+notifications:
+  email:
+    recipients:
+      - 445172495@qq.com
+    on_success: always
+    on_failure: always
